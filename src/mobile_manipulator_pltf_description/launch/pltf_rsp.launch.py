@@ -28,7 +28,7 @@ def generate_launch_description():
     )
 
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("hunter_description"), "rviz", "robot_view.rviz"]
+        [FindPackageShare("hunter_with_arm_description"), "rviz", "robot_view.rviz"]
     )    
     
     # Create a robot_state_publisher node

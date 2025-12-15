@@ -51,8 +51,8 @@ colcon build
 
 This repository includes the following ROS 2 packages:
 
-1. **`hunter_description`**: URDF and robot description files.
-2. **`hunter_gazebo`**: Simulation environment for the Hunter V2 in Gazebo.
+1. **`hunter_with_arm_description`**: URDF and robot description files.
+2. **`hunter_with_arm_gazebo`**: Simulation environment for the Hunter V2 in Gazebo.
 
 ---
 
@@ -63,7 +63,7 @@ This repository includes the following ROS 2 packages:
 To view the robot model and interact with its joints in Rviz:
 
 ```bash
-ros2 launch hunter_description robot_view.launch.py
+ros2 launch hunter_with_arm_description robot_view.launch.py
 ```
 
 This launch file starts Rviz and loads the Hunter V2 model.
@@ -77,7 +77,7 @@ This launch file starts Rviz and loads the Hunter V2 model.
 To load the Hunter V2 in a Gazebo simulation environment:
 
 ```bash
-ros2 launch hunter_gazebo launch_sim.launch.py
+ros2 launch hunter_with_arm_gazebo launch_sim.launch.py
 ```
 
 [Gazebo Simulation](https://github.com/user-attachments/assets/90757617-af3b-4bc8-bf1f-f08c5ecc1247)
@@ -98,7 +98,7 @@ Use the keyboard inputs to move the robot in the simulation.
 
 ## Robot Controller Configuration
 
-The main configuration of the robot controller is available [here](https://github.com/LCAS/hunter_robot/blob/main/hunter_description/config/ackermann_like_controller.yaml)
+The main configuration of the robot controller is available [here](https://github.com/LCAS/hunter_robot/blob/main/hunter_with_arm_description/config/ackermann_like_controller.yaml)
 
 ---
 

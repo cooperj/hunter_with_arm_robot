@@ -78,7 +78,7 @@ def generate_launch_description():
         executable='spawn_entity.py',
         arguments=[
             '-topic', 'robot_description',
-            '-entity', 'hunter_gazebo',
+            '-entity', 'hunter_with_arm_gazebo',
             '-x', x_pose,
             '-y', y_pose,
             '-z', '0.01',
@@ -107,7 +107,7 @@ def generate_launch_description():
         executable='rviz2',
         arguments=[
             '-d',
-            os.path.join(os.path.join(get_package_share_directory('hunter_description')), 'rviz/robot_view.rviz'),
+            os.path.join(os.path.join(get_package_share_directory('hunter_with_arm_description')), 'rviz/robot_view.rviz'),
         ],
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],

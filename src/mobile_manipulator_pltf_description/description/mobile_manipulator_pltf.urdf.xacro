@@ -21,16 +21,16 @@
     <xacro:if value="$(arg use_base)">
       <xacro:if value="$(arg is_sim)">
         <xacro:if value="$(arg use_arm)">
-          <xacro:include filename="$(find hunter_description)/description/robot2.urdf.xacro"/>
+          <xacro:include filename="$(find hunter_with_arm_description)/description/robot2.urdf.xacro"/>
         </xacro:if>
         <xacro:unless value="$(arg use_arm)">
-          <xacro:include filename="$(find hunter_description)/description/robot.urdf.xacro"/>
+          <xacro:include filename="$(find hunter_with_arm_description)/description/robot.urdf.xacro"/>
         </xacro:unless>
         <xacro:property name="front_lidar_rpy" value="0 0 0"/>
         <xacro:property name="back_lidar_rpy" value="0 0 3.14159"/>
       </xacro:if>
       <xacro:unless value="$(arg is_sim)">
-        <xacro:include filename="$(find hunter_description)/description/robot_core_real_hack.xacro"/>
+        <xacro:include filename="$(find hunter_with_arm_description)/description/robot_core_real_hack.xacro"/>
         <xacro:property name="front_lidar_rpy" value="-0.0174533 0 0"/>
         <xacro:property name="back_lidar_rpy" value="0 0 3.14159"/>
       </xacro:unless>

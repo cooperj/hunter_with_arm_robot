@@ -147,7 +147,7 @@ def generate_launch_description():
     rviz = Node(
         package='rviz2',
         executable='rviz2',
-        arguments=['-d', os.path.join(get_package_share_directory('hunter_description'), 'rviz/robot_view.rviz')],
+        arguments=['-d', os.path.join(get_package_share_directory('hunter_with_arm_description'), 'rviz/robot_view.rviz')],
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
         condition=IfCondition(use_rviz)

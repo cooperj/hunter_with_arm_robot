@@ -25,7 +25,7 @@ def generate_launch_description():
     # Launch configuration for use_sim_time
     use_sim_time_config = LaunchConfiguration('use_sim_time')
 
-    gazebo_params_file = os.path.join(get_package_share_directory("hunter_gazebo"), 'config', 'gazebo_params.yaml')
+    gazebo_params_file = os.path.join(get_package_share_directory("hunter_with_arm_gazebo"), 'config', 'gazebo_params.yaml')
 
     # Include the Gazebo launch file, provided by the gazebo_ros package
     gazebo = IncludeLaunchDescription(
@@ -34,8 +34,8 @@ def generate_launch_description():
         launch_arguments={'extra_gazebo_args': '--ros-args --params-file ' + gazebo_params_file}.items()
     )
 
-    hunter_description_path = os.path.join(
-        get_package_share_directory('hunter_description'))
+    hunter_with_arm_description_path = os.path.join(
+        get_package_share_directory('hunter_with_arm_description'))
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -43,7 +43,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("hunter_description"), "description", 'robot.urdf.xacro']
+                [FindPackageShare("hunter_with_arm_description"), "description", 'robot.urdf.xacro']
             ),
         ]
     )
@@ -83,7 +83,7 @@ def generate_launch_description():
         executable='rviz2',
         arguments=[
             '-d',
-            os.path.join(hunter_description_path, 'rviz/robot_view.rviz'),
+            os.path.join(hunter_with_arm_description_path, 'rviz/robot_view.rviz'),
         ],
         output='screen',
         parameters=[{'use_sim_time': use_sim_time_config}]

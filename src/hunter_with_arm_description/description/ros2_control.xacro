@@ -40,7 +40,7 @@
   </ros2_control>
   <gazebo>
     <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-      <parameters>$(find hunter_description)/config/ackermann_like_controller.yaml</parameters>
+      <parameters>$(find hunter_with_arm_description)/config/ackermann_like_controller.yaml</parameters>
     </plugin>
   </gazebo>
 

@@ -171,7 +171,7 @@ def generate_launch_description():
         executable='spawn_entity.py',
         arguments=[
             '-topic', 'robot_description',
-            '-entity', 'hunter_gazebo',
+            '-entity', 'hunter_with_arm_gazebo',
             '-x', x_pose,
             '-y', y_pose,
             '-z', '0.01',

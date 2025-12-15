@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>hunter_gazebo</name>
+  <name>hunter_with_arm_gazebo</name>
   <version>0.0.2</version>
   <description>Gazebo package for hunter robot</description>
   <maintainer email="ihroob@lincoln.ac.uk">Ibrahim Hroob</maintainer>
@@ -14,7 +14,7 @@
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
-  <exec_depend>hunter_description</exec_depend>
+  <exec_depend>hunter_with_arm_description</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>gazebo_ros2_control</exec_depend>
   <exec_depend>controller_manager</exec_depend>

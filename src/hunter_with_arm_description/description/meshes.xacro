@@ -5,13 +5,13 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/> 
       <geometry>
-        <mesh filename="file://$(find hunter_description)/meshes/${name}.dae" />
+        <mesh filename="file://$(find hunter_with_arm_description)/meshes/${name}.dae" />
       </geometry>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/> 
       <geometry>
-        <mesh filename="file://$(find hunter_description)/meshes/${name}.dae" />
+        <mesh filename="file://$(find hunter_with_arm_description)/meshes/${name}.dae" />
       </geometry>
     </collision>
   </xacro:macro>

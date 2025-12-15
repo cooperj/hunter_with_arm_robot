@@ -40,7 +40,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("hunter_description"), "description", description_file]
+                [FindPackageShare("hunter_with_arm_description"), "description", description_file]
             ),
         ]
     )
@@ -50,7 +50,7 @@ def generate_launch_description():
     }
 
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("hunter_description"), "rviz", "robot_view.rviz"]
+        [FindPackageShare("hunter_with_arm_description"), "rviz", "robot_view.rviz"]
     )
 
     joint_state_publisher_node = Node(
