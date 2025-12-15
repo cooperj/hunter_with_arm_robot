@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+ <xacro:macro name="mobile_base_depth_camera" params="name x y z roll:=0.0 pitch:=0.0 yaw:=0.0 is_sim:=true">
+    <joint name="${name}_camera_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="${name}_link"/>
+        <origin xyz="${x} ${y} ${z}" rpy="${roll} ${pitch} ${yaw}"/>
+    </joint>
+
+    <link name="${name}_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 -1.57"/>
+            <geometry>
+                <mesh filename="file://$(find mobile_manipulator_pltf_description)/meshes/zed2.dae"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="${name}_optical_joint" type="fixed">
+        <parent link="${name}_link"/>
+        <child link="${name}_link_optical"/>
+        <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    </joint>
+
+    <link name="${name}_link_optical"></link>
+
+
+<xacro:if value="${is_sim}">
+    <gazebo reference="${name}_link">
+        <sensor name="${name}_camera" type="depth">
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <camera>
+                <horizontal_fov>2.089</horizontal_fov>
+                <image>
+                    <format>B8G8R8</format>
+                    <width>640</width>
+                    <height>480</height>
+                </image>
+                <clip>
+                    <near>0.05</near>
+                    <far>8.0</far>
+                </clip>
+            </camera>
+            <plugin name="${name}_camera_controller" filename="libgazebo_ros_camera.so">
+                <camera_name>${name}</camera_name>
+                <frame_name>${name}_link_optical</frame_name>
+                <hack_baseline>0.07</hack_baseline>
+                <min_depth>0.4</min_depth>
+                <max_depth>6</max_depth>
+                <ros>
+                    <namespace></namespace>
+                    <qos>
+                        <topic name="/${name}/points">
+                            <publisher>
+                                <reliability>best_effort</reliability>  <!-- Change to 'best_effort' -->
+                                <durability>volatile</durability>       <!-- Optionally set durability -->
+                            </publisher>
+                        </topic>
+                    </qos>
+                </ros>
+            </plugin>
+        </sensor>
+    </gazebo>
+</xacro:if>
+</xacro:macro>
+</robot>

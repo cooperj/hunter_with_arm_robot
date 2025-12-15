@@ -1,0 +1,4 @@
+[submodule "contrib/warehouse_ros_mongo"]
+	path = contrib/warehouse_ros_mongo
+	url = https://github.com/moveit/warehouse_ros_mongo.git
+	branch = ros2

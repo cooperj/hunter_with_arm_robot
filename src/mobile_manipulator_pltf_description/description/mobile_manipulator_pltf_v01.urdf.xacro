@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="mobile_manipulator_pltf">
+   <xacro:arg name="is_sim" default="true"/>
+   <xacro:arg name="prefix" default="" />
+   <xacro:if value="$(arg is_sim)">
+      <xacro:include filename="$(find hunter_description)/description/robot.urdf.xacro"/>
+      <xacro:property name="front_lidar_rpy" value="0 0 0"/>
+      <xacro:property name="back_lidar_rpy" value="0 0 3.14159"/>
+   </xacro:if>
+   <xacro:unless value="$(arg is_sim)">
+      <xacro:include filename="$(find hunter_description)/description/robot_core_real_hack.xacro"/>
+      <xacro:property name="front_lidar_rpy" value="-0.0174533 0 0"/>
+      <xacro:property name="back_lidar_rpy" value="0 0 3.14159"/>
+   </xacro:unless>
+
+   <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/lidar.urdf.xacro"/>
+   <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/mid360.xacro"/>
+   <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/imu.urdf.xacro"/>
+   <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/gps.urdf.xacro"/>
+   <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/depth_camera.urdf.xacro"/>
+   
+   <xacro:mobile_base_imu name="$(arg prefix)imu" is_sim="$(arg is_sim)" x="-0.25" y="0.0" z="0.47" topic="/gps_base/yaw"/>
+   <xacro:mobile_base_imu name="$(arg prefix)imu1" is_sim="$(arg is_sim)" x="0.25" y="0.0" z="0.47" topic="/imu/data"/>
+   <!-- <xacro:mobile_base_lidar name="$(arg prefix)front_lidar" x="0.615" y="0.28" z="0.33" is_sim="$(arg is_sim)" /> -->
+   <!-- <xacro:mobile_base_lidar name="$(arg prefix)back_lidar" x="-0.565" y="-0.28" z="0.33"  yaw="3.14" is_sim="$(arg is_sim)"/> -->
+   <xacro:mobile_base_depth_camera name="front_camera" x="0.55" y="-0.00" z="0.72" is_sim="$(arg is_sim)" />
+   <xacro:mobile_base_depth_camera name="back_camera" x="-0.55" y="-0.00" z="0.72" is_sim="$(arg is_sim)" yaw="3.14"/>
+   <!-- <xacro:mobile_base_depth_camera name="fish_front_camera" x="0.55" y="0.00" z="0.93" is_sim="$(arg is_sim)" /> -->
+   <!-- <xacro:mobile_base_depth_camera name="fish_right_camera" x="0.495" y="0.08" z="0.93" is_sim="$(arg is_sim)"  yaw="1.57"/> -->
+   <!-- <xacro:mobile_base_depth_camera name="fish_back_camera" x="0.179" y="0.00" z="1.28" is_sim="$(arg is_sim)" yaw="3.14" />-->
+   <!-- <xacro:mobile_base_depth_camera name="fish_left_camera" x="0.495" y="-0.08" z="0.93" is_sim="$(arg is_sim)" yaw="-1.57" /> -->
+   <xacro:mobile_base_gps name="$(arg prefix)gps_base" is_sim="$(arg is_sim)" x="-0.25" y="0.0" z="0.47" yaw="0.037482" />
+   <!-- <xacro:mobile_base_gps name="$(arg prefix)back_antenna" is_sim="$(arg is_sim)" x="-0.5" y="-0.245" z="0.80"/> -->
+   <!-- <xacro:mobile_base_gps name="$(arg prefix)front_antenna" is_sim="$(arg is_sim)" x="0.5" y="-0.245" z="0.80"/> -->
+
+   <xacro:mid360 name="$(arg prefix)front_lidar_link" topic="front_lidar/points" origin_xyz="0.56 0.23 0.46" origin_rpy="${front_lidar_rpy}" is_sim="$(arg is_sim)"/>
+   <xacro:mid360 name="$(arg prefix)back_lidar_link" topic="back_lidar/points" origin_xyz="-0.56 -0.23 0.46" origin_rpy="${back_lidar_rpy}" is_sim="$(arg is_sim)"/>
+
+   <xacro:arg name="arm_id" default="panda"/> <!-- Name of this panda -->
+   <xacro:arg name="hand" default="false"/> <!-- Should a franka_gripper be mounted at the flange? -->
+   <xacro:arg name="camera" default="false"/> <!-- Should a camera be mounted at the flange? -->
+   <xacro:arg name="camera_model" default="blackfly_s"/> <!-- Which camera model will be used -->
+   <xacro:arg name="robot_ip" default=""/> <!-- IP address or hostname of the robot" -->
+   <xacro:arg name="use_fake_hardware" default="true"/>
+   <xacro:arg name="fake_sensor_commands" default="false"/>
+   <xacro:arg name="connected_to" default="chassis"/>
+
+   <xacro:include filename="$(find franka_description)/robots/panda_arm.xacro"/>
+   <xacro:panda_arm arm_id="$(arg arm_id)" safety_distance="0.03" connected_to="$(arg connected_to)"/>
+
+   <xacro:if value="$(arg hand)">
+      <xacro:include filename="$(find franka_description)/robots/hand.xacro"/>
+      <xacro:hand ns="$(arg arm_id)" rpy="0 0 ${-pi/4}" connected_to="$(arg arm_id)_link8" safety_distance="0.03"/>
+   </xacro:if>
+   <xacro:if value="$(arg camera)">
+      <xacro:include filename="$(find flir_camera_description)/urdf/camera.urdf.xacro"/>
+      <xacro:camera ns="$(arg arm_id)" rpy="0 ${-pi/2} 0" xyz="0.01425 0 0.09" connected_to="$(arg arm_id)_link8"/>
+   </xacro:if>
+   <xacro:include filename="$(find franka_description)/robots/panda_arm.ros2_control.xacro"/>
+   <xacro:panda_arm_ros2_control ns="$(arg arm_id)" robot_ip="$(arg robot_ip)" is_sim="$(arg is_sim)" use_fake_hardware="$(arg use_fake_hardware)" fake_sensor_commands="$(arg fake_sensor_commands)"/>
+
+</robot>

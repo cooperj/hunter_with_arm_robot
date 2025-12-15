@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="mobile_base_gps" params="name x:=0.0 y:=0.0 z:=0.0 roll:=0.0 pitch:=0.0 yaw:=0.0 is_sim:=true">
+    
+    <!-- Choose yaw value: force to 0.0 in simulation, else use provided yaw -->
+    <xacro:property name="final_yaw" value="${0.0 if is_sim else yaw}" />
+    
+    <!-- Define the joint and link once -->
+    <joint name="${name}_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${name}_link"/>
+      <origin xyz="${x} ${y} ${z}" rpy="${roll} ${pitch} ${final_yaw}"/>
+    </joint>
+    <link name="${name}_link"/>
+    
+    <!-- Add Gazebo sensor only when in simulation -->
+    <xacro:if value="${is_sim}">
+      <gazebo reference="${name}_link">
+        <sensor name="${name}_gps" type="gps">
+          <plugin filename="libgazebo_ros_gps_sensor.so" name="${name}_controller">
+            <ros>
+              <!-- <namespace>$(arg prefix)</namespace> -->
+              <remapping>~/out:=/${name}/fix</remapping>
+            </ros>
+            <frame_name>${name}_link</frame_name>
+          </plugin>
+          <always_on>true</always_on>
+          <update_rate>10</update_rate>
+        </sensor>
+      </gazebo>
+    </xacro:if>
+    
+  </xacro:macro>
+</robot>

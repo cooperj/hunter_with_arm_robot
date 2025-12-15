@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ur">
+    <!-- <xacro:arg name="initial_positions_file" default="initial_positions.yaml" /> -->
+
+    <!-- Import ur urdf file -->
+    <!-- <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/ur5_camera_gripper.urdf.xacro" /> -->
+
+    <!-- Import control_xacro -->
+    <!-- <xacro:include filename="ur.ros2_control.xacro" />
+
+
+    <xacro:ur_ros2_control name="FakeSystem" initial_positions_file="$(arg initial_positions_file)"/> -->
+
+    <!-- Define arguments for mobile manipulator configuration -->
+    <xacro:arg name="use_base" default="true"/>
+    <xacro:arg name="use_arm" default="true"/>
+    <xacro:arg name="prefix" default=""/>
+    <xacro:arg name="is_sim" default="true"/>
+
+    <!-- Import mobile manipulator URDF -->
+    <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/mobile_manipulator_pltf.urdf.xacro"/>
+
+    <!-- Instantiate mobile manipulator with specified arguments -->
+    <xacro:mobile_manipulator_pltf
+        is_sim="$(arg is_sim)"
+        prefix="$(arg prefix)"
+        use_base="$(arg use_base)"
+        use_arm="$(arg use_arm)"
+    />
+
+</robot>

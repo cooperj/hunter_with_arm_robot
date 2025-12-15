@@ -2,33 +2,35 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
 	"name": "L-CAS Humble hunter_robot",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "lcas.lincoln.ac.uk/lcas/ros:humble",
 	"dockerFile": "./Dockerfile",
 	"context": "..",
 
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	"features": {
-		"ghcr.io/LCAS/devcontainer-features/desktop-lite:1": {
-		}
-	},	
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [6080],
+	"forwardPorts": [
+		5801
+	],
 	"portsAttributes": {
-	  "6080": {
-			"label": "desktop"
-	  }
+		"5801": {
+			"label": "novnc",
+			"onAutoForward": "openPreview"
+		}
 	},
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "uname -a",
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	"remoteUser": "ros",
+
+	"initializeCommand": "mkdir -p ${localEnv:HOME}/.aoc-ws-cache",
+	"postCreateCommand": "sudo bash /home/ros/aoc_hunter_ws/src/.devcontainer/scripts/post-create.sh",
+
+	"mounts": [
+		"source=/etc/timezone,target=/etc/timezone,type=bind,readonly",
+		"source=/etc/localtime,target=/etc/localtime,type=bind,readonly",
+	],
+
+	"securityOpt": [
+		"seccomp=unconfined"
+	],
+	"updateRemoteUserUID": true,
+	"workspaceFolder": "/home/ros/aoc_hunter_ws",
+	"workspaceMount": "source=${localWorkspaceFolder},target=/home/ros/aoc_hunter_ws/src/,type=bind",
+
 	"customizations": {
 		"vscode": {
 			"extensions": [
