@@ -17,8 +17,8 @@
     <xacro:arg name="prefix" default=""/>
     <xacro:arg name="is_sim" default="true"/>
 
-    <!-- Import mobile manipulator URDF -->
-    <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/mobile_manipulator_pltf.urdf.xacro"/>
+    <!-- Import mobile manipulator URDF macro -->
+    <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/mobile_manipulator_pltf_macro.xacro"/>
 
     <!-- Instantiate mobile manipulator with specified arguments -->
     <xacro:mobile_manipulator_pltf

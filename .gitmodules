@@ -2,3 +2,23 @@
 	path = contrib/warehouse_ros_mongo
 	url = https://github.com/moveit/warehouse_ros_mongo.git
 	branch = ros2
+[submodule "contrib/livox_ros_driver2"]
+	path = contrib/livox_ros_driver2
+	url = https://github.com/LCAS/livox_ros_driver2.git
+[submodule "contrib/livox_laser_simulation_ros2"]
+	path = contrib/livox_laser_simulation_ros2
+	url = https://github.com/LCAS/livox_laser_simulation_ros2
+[submodule "contrib/ros2_zed_multi_camera"]
+	path = contrib/ros2_zed_multi_camera
+	url = https://github.com/LCAS/ros2_zed_multi_camera.git
+[submodule "contrib/zed-ros2-wrapper"]
+	path = contrib/zed-ros2-wrapper
+	url = https://github.com/LCAS/zed-ros2-wrapper.git
+[submodule "contrib/ros2_robotiq_gripper"]
+	path = contrib/ros2_robotiq_gripper
+	url = https://github.com/LCAS/ros2_robotiq_gripper.git
+	branch = humble
+[submodule "contrib/serial"]
+	path = contrib/serial
+	url = https://github.com/tylerjw/serial.git
+	branch = ros2

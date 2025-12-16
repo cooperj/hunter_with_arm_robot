@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="mobile_manipulator_pltf">
+
+  <!-- Define the macro -->
+  <xacro:macro name="mobile_manipulator_pltf" params="is_sim prefix use_base use_arm">
+    
+    <xacro:property name="use_base_val" value="${use_base}"/>
+    <xacro:property name="use_arm_val" value="${use_arm}"/>
+    <xacro:property name="pltf_description_path" value="$(find mobile_manipulator_pltf_description)"/>
+    <xacro:property name="initial_positions" value="${xacro.load_yaml(pltf_description_path + '/config/initial_positions.yaml')}"/>
+
+    <xacro:property name="arm_parent_link" value="${'chassis' if use_base_val else 'world'}"/>
+
+    <xacro:unless value="${use_base_val}">
+      <link name="world"/>
+    </xacro:unless>
+
+    <xacro:if value="${use_base_val}">
+      <xacro:if value="${is_sim}">
+        <xacro:if value="${use_arm_val}">
+          <xacro:include filename="$(find hunter_with_arm_description)/description/robot2.urdf.xacro"/>
+        </xacro:if>
+        <xacro:unless value="${use_arm_val}">
+          <xacro:include filename="$(find hunter_with_arm_description)/description/robot.urdf.xacro"/>
+        </xacro:unless>
+        <xacro:property name="front_lidar_rpy" value="0 0 0"/>
+        <xacro:property name="back_lidar_rpy" value="0 0 3.14159"/>
+      </xacro:if>
+      <xacro:unless value="${is_sim}">
+        <xacro:include filename="$(find hunter_with_arm_description)/description/robot_core_real_hack.xacro"/>
+        <xacro:property name="front_lidar_rpy" value="-0.0174533 0 0"/>
+        <xacro:property name="back_lidar_rpy" value="0 0 3.14159"/>
+      </xacro:unless>
+
+      <!-- Include sensors -->
+      <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/lidar.urdf.xacro"/>
+      <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/mid360.xacro"/>
+      <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/imu.urdf.xacro"/>
+      <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/gps.urdf.xacro"/>
+      <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/depth_camera.urdf.xacro"/>
+
+      <!-- Sensor instantiation -->
+      <xacro:mobile_base_imu name="${prefix}imu" is_sim="${is_sim}" x="-0.25" y="0.0" z="0.47" topic="/gps_base/yaw"/>
+      <xacro:mobile_base_imu name="${prefix}imu1" is_sim="${is_sim}" x="0.25" y="0.0" z="0.47" topic="/imu/data"/>
+      <xacro:mobile_base_depth_camera name="front_camera" x="0.55" y="-0.00" z="0.72" is_sim="${is_sim}"/>
+      <xacro:mobile_base_depth_camera name="back_camera" x="-0.55" y="-0.00" z="0.72" is_sim="${is_sim}" yaw="3.14"/>
+      <xacro:mobile_base_gps name="${prefix}gps_base" is_sim="${is_sim}" x="-0.25" y="0.0" z="0.47" yaw="0.037482"/>
+      <xacro:mid360 name="${prefix}front_lidar_link" topic="front_lidar/points" origin_xyz="0.56 0.23 0.46" origin_rpy="${front_lidar_rpy}" is_sim="${is_sim}"/>
+      <xacro:mid360 name="${prefix}back_lidar_link" topic="back_lidar/points" origin_xyz="-0.56 -0.23 0.46" origin_rpy="${back_lidar_rpy}" is_sim="${is_sim}"/>
+    </xacro:if>
+
+    <xacro:if value="${use_arm_val}">
+      <xacro:include filename="$(find mobile_manipulator_pltf_description)/description/ur5_camera_gripper_pltf.urdf.xacro"/>
+
+      <xacro:ur_robot
+        name="ur"
+        tf_prefix="${prefix}"
+        parent="${arm_parent_link}"
+        joint_limits_parameters_file="$(find ur_description)/config/ur5/joint_limits.yaml"
+        kinematics_parameters_file="$(find ur_description)/config/ur5/default_kinematics.yaml"
+        physical_parameters_file="$(find ur_description)/config/ur5/physical_parameters.yaml"
+        visual_parameters_file="$(find ur_description)/config/ur5/visual_parameters.yaml"
+        transmission_hw_interface=""
+        safety_limits="false"
+        safety_pos_margin="0.15"
+        safety_k_position="20"
+        use_fake_hardware="true"
+        fake_sensor_commands="false"
+        sim_gazebo="true"
+        sim_ignition="false"
+        headless_mode="false"
+        initial_positions="${initial_positions}"
+        use_tool_communication="false"
+        tool_voltage="0"
+        tool_parity="0"
+        tool_baud_rate="115200"
+        tool_stop_bits="1"
+        tool_rx_idle_chars="1.5"
+        tool_tx_idle_chars="3.5"
+        tool_device_name="/tmp/ttyUR"
+        tool_tcp_port="54321"
+        robot_ip="0.0.0.0"
+        script_filename=""
+        output_recipe_filename=""
+        input_recipe_filename=""
+        reverse_ip="0.0.0.0"
+        script_command_port="50004"
+        reverse_port="50001"
+        script_sender_port="50002"
+        trajectory_port="50003"
+      >
+        <origin xyz="0 0 0.0" rpy="0 0 0"/>
+      </xacro:ur_robot>
+
+      <xacro:robotiq_gripper
+        name="RobotiqGripperHardwareInterface"
+        prefix="${prefix}"
+        parent="tool0"
+        use_fake_hardware="true"
+        com_port="/dev/ttyUSB0"
+        sim_gazebo="true"
+      >
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:robotiq_gripper>
+    </xacro:if>
+  </xacro:macro>
+
+</robot>

@@ -389,6 +389,14 @@ def generate_launch_description():
         )
     )
 
+    # Delay spawning the robot until the robot_state_publisher has started
+    delay_spawn_robot = RegisterEventHandler(
+        OnProcessStart(
+            target_action=robot_state_publisher,
+            on_start=[spawn_the_robot],
+        )
+    )
+
     # Add all actions to launch description
     ld.add_action(x_arg)
     ld.add_action(y_arg)
@@ -409,7 +417,7 @@ def generate_launch_description():
     ld.add_action(gazebo)
     ld.add_action(controller_manager_node)
     ld.add_action(robot_state_publisher)
-    ld.add_action(spawn_the_robot)
+    ld.add_action(delay_spawn_robot)
     ld.add_action(delay_joint_state_broadcaster)
     ld.add_action(delay_arm_controller)
     ld.add_action(delay_gripper_controller)
