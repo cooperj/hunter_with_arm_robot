@@ -9,12 +9,14 @@
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <build_depend>ur_description</build_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>mobile_manipulator_pltf_description</exec_depend>
+  <exec_depend>ur_description</exec_depend>
   <export>
     <build_type>ament_cmake</build_type>
   </export>

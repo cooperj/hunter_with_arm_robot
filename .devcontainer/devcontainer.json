@@ -4,9 +4,8 @@
 	"name": "L-CAS Humble hunter_robot",
 	"dockerFile": "./Dockerfile",
 	"context": "..",
-
 	"forwardPorts": [
-		5801
+		5801, 27018
 	],
 	"portsAttributes": {
 		"5801": {
@@ -15,29 +14,58 @@
 		}
 	},
 	"remoteUser": "ros",
-
 	"initializeCommand": "mkdir -p ${localEnv:HOME}/.aoc-ws-cache",
-	"postCreateCommand": "sudo bash /home/ros/aoc_hunter_ws/src/.devcontainer/scripts/post-create.sh",
-
+	"postCreateCommand": "sudo bash /home/ros/aoc_hunter_ws/src/.devcontainer/scripts/post_create.sh",
 	"mounts": [
 		"source=/etc/timezone,target=/etc/timezone,type=bind,readonly",
 		"source=/etc/localtime,target=/etc/localtime,type=bind,readonly",
 	],
-
 	"securityOpt": [
 		"seccomp=unconfined"
 	],
 	"updateRemoteUserUID": true,
 	"workspaceFolder": "/home/ros/aoc_hunter_ws",
 	"workspaceMount": "source=${localWorkspaceFolder},target=/home/ros/aoc_hunter_ws/src/,type=bind",
-
+	"capAdd": [
+		"NET_ADMIN",
+		"SYS_PTRACE"
+	],
+	"containerEnv": {
+		"MONGOD_PORT": "27018", // mongodb port
+		"ROS_DOMAIN_ID": "1", // we use ROS_DOMAIN_ID=1 as a default here. Change for different scenarios.
+		"USE_SIM": "true", // we use the simulation by default, set to false to use the real robot
+		"COLCON_WS": "/home/ros/aoc_hunter_ws"
+	},
 	"customizations": {
 		"vscode": {
+			"settings": {
+				"colcon.provideTasks": true,
+				"colcon.colconExe": "/usr/bin/colcon",
+				"colcon.rosInstallPath.linux": "/opt/ros/${version}/",
+				"colcon.shellType": "bash",
+				"colcon.workspaceSetup": [
+					"install/setup.sh"
+				],
+				"colcon.colconCwd": "${workspaceFolder}",
+				"colcon.env": "/tmp/colcon.env",
+				"mdb.presetConnections": [
+					{
+						"name": "local DB",
+						"connectionString": "mongodb://localhost:27018/"
+					}
+				]
+			},
 			"extensions": [
+				"mongodb.mongodb-vscode",
 				"ms-python.python",
 				"GitHub.vscode-pull-request-github",
 				"ms-vscode.cpptools"
 			]
 		}
-	}
+	},
+	"hostRequirements": {
+		"cpus": 2,
+		"gpu": "optional",
+		"memory": "7gb"
+	},
 }

@@ -1,4 +1,4 @@
-FROM lcas.lincoln.ac.uk/lcas/ros-docker-images:jammy-cuda12.2-humble-2 AS base
+FROM lcas.lincoln.ac.uk/lcas/aoc_scenario_base:latest AS base
 
 ENV DEBIAN_FRONTEND=noninteractive
 USER root
@@ -33,3 +33,10 @@ RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN echo "source /opt/ros/humble/setup.bash" >> /etc/bash.bashrc
 
 USER ros
+
+LABEL org.opencontainers.image.target="devcontainer"
+# set to domain id 1 as a default
+ENV ROS_DOMAIN_ID=1
+
+# default command for a devcontainer
+CMD ["/bin/sh", "-c", "while sleep 1000; do :; done"]

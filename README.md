@@ -132,3 +132,15 @@ For more details on ROS 2 Control and Gazebo integration, see:
 # Mobile Manipulator Platform ROS 2 Packages
 
 This repository is designed for bringing up a mobile manipulator platform: `mobile_manipulator_pltf_bringup`, `mobile_manipulator_pltf_description`, and `mobile_manipulator_pltf_gazebo` to facilitate bringing up the robot, providing its description, and simulating it in Gazebo, part of the Agri-OpenCore (AOC) project.
+
+
+--- 
+
+# Josh's Notes
+
+## Testing description of a manipulator
+To visualize the robot install this repository to you workspace and execute the following:
+
+```bash
+ros2 launch ur_description view_ur.launch.py ur_type:=ur5e
+```
