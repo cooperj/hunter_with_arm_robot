@@ -21,4 +21,4 @@ chown -R ros:ros /home/ros/aoc_hunter_ws/install
 chown -R ros:ros /home/ros/aoc_hunter_ws/build
 chown -R ros:ros /home/ros/aoc_hunter_ws/log
 
-cd /home/ros/aoc_hunter_ws/ && colcon build --symlink-install
+cd /home/ros/aoc_hunter_ws/ && colcon build
