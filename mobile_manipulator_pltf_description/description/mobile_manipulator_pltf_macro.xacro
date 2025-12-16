@@ -103,6 +103,16 @@
         <origin xyz="0 0 0" rpy="0 0 0"/>
       </xacro:robotiq_gripper>
     </xacro:if>
+
+    <!-- Disable collision between base_link_inertia (UR arm base) and chassis -->
+    <xacro:if value="${use_arm_val}">
+      <gazebo>
+        <disable_collisions>
+          <pair>base_link_inertia</pair>
+          <pair>chassis</pair>
+        </disable_collisions>
+      </gazebo>
+    </xacro:if>
   </xacro:macro>
 
 </robot>
