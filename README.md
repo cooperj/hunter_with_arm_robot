@@ -51,8 +51,9 @@ colcon build
 
 This repository includes the following ROS 2 packages:
 
-1. **`hunter_with_arm_description`**: URDF and robot description files.
-2. **`hunter_with_arm_gazebo`**: Simulation environment for the Hunter V2 in Gazebo.
+1. **`hunter_with_arm_description`**: URDF and robot description files. Also includes Gazebo simulation launch files and configuration (previously in `hunter_with_arm_gazebo`).
+2. **`mobile_manipulator_pltf_description`**: Description and simulation files for the mobile manipulator platform. Includes Gazebo simulation launch files and worlds (previously in `mobile_manipulator_pltf_gazebo`).
+3. **`mobile_manipulator_pltf_bringup`**: MoveIt configuration and bringup files for the mobile manipulator platform.
 
 ---
 
@@ -77,7 +78,7 @@ This launch file starts Rviz and loads the Hunter V2 model.
 To load the Hunter V2 in a Gazebo simulation environment:
 
 ```bash
-ros2 launch hunter_with_arm_gazebo launch_sim.launch.py
+ros2 launch hunter_with_arm_description launch_sim.launch.py
 ```
 
 [Gazebo Simulation](https://github.com/user-attachments/assets/90757617-af3b-4bc8-bf1f-f08c5ecc1247)

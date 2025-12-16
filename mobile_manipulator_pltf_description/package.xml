@@ -20,6 +20,10 @@
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
   <depend>trajectory_msgs</depend>
+  
+  <!-- Gazebo simulation dependencies (merged from mobile_manipulator_pltf_gazebo) -->
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>controller_manager</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

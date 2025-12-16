@@ -25,7 +25,7 @@ def generate_launch_description():
     # Launch configuration for use_sim_time
     use_sim_time_config = LaunchConfiguration('use_sim_time')
 
-    gazebo_params_file = os.path.join(get_package_share_directory("hunter_with_arm_gazebo"), 'config', 'gazebo_params.yaml')
+    gazebo_params_file = os.path.join(get_package_share_directory("hunter_with_arm_description"), 'config', 'gazebo_params.yaml')
 
     # Include the Gazebo launch file, provided by the gazebo_ros package
     gazebo = IncludeLaunchDescription(

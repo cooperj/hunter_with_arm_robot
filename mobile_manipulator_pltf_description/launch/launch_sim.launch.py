@@ -16,7 +16,7 @@ from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
-    pkg_dir = get_package_share_directory('mobile_manipulator_pltf_gazebo')
+    pkg_dir = get_package_share_directory('mobile_manipulator_pltf_description')
 
     # Launch configurations
     world_path = LaunchConfiguration('world_path', default=os.path.join(pkg_dir, 'worlds', 'empty_world.world'))
@@ -125,7 +125,7 @@ def generate_launch_description():
     moveit_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
-                FindPackageShare("mobile_manipulator_pltf_gazebo"), "launch", "ur_classic_moveit.launch.py"
+                FindPackageShare("mobile_manipulator_pltf_description"), "launch", "ur_classic_moveit.launch.py"
             ])
         ]),
         condition=IfCondition(use_arm),
