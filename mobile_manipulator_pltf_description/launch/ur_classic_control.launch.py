@@ -20,6 +20,7 @@ from launch_ros.substitutions import FindPackageShare
 import os
 from ament_index_python.packages import get_package_share_directory
 
+
 def launch_setup(context, *args, **kwargs):
     ur_type = LaunchConfiguration("ur_type")
     safety_limits = LaunchConfiguration("safety_limits")
@@ -51,29 +52,37 @@ def launch_setup(context, *args, **kwargs):
         [FindPackageShare(description_package), "rviz", "view_robot.rviz"]
     )
 
-    robot_description_content = Command([
-        PathJoinSubstitution([FindExecutable(name="xacro")]),
-        " ",
-        PathJoinSubstitution([
-            FindPackageShare(description_package), "urdf", description_file
-        ]),
-        " ",
-        "safety_limits:=", safety_limits,
-        " ",
-        "safety_pos_margin:=", safety_pos_margin,
-        " ",
-        "safety_k_position:=", safety_k_position,
-        " ",
-        "name:=ur",
-        " ",
-        "ur_type:=", ur_type,
-        " ",
-        "tf_prefix:=", prefix,
-        " ",
-        "sim_gazebo:=true",
-        " ",
-        "simulation_controllers:=", initial_joint_controllers,
-    ])
+    robot_description_content = Command(
+        [
+            PathJoinSubstitution([FindExecutable(name="xacro")]),
+            " ",
+            PathJoinSubstitution(
+                [FindPackageShare(description_package), "urdf", description_file]
+            ),
+            " ",
+            "safety_limits:=",
+            safety_limits,
+            " ",
+            "safety_pos_margin:=",
+            safety_pos_margin,
+            " ",
+            "safety_k_position:=",
+            safety_k_position,
+            " ",
+            "name:=ur",
+            " ",
+            "ur_type:=",
+            ur_type,
+            " ",
+            "tf_prefix:=",
+            prefix,
+            " ",
+            "sim_gazebo:=true",
+            " ",
+            "simulation_controllers:=",
+            initial_joint_controllers,
+        ]
+    )
     robot_description = {"robot_description": robot_description_content}
 
     robot_state_publisher_node = Node(
@@ -95,7 +104,11 @@ def launch_setup(context, *args, **kwargs):
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=[
+            "joint_state_broadcaster",
+            "--controller-manager",
+            "/controller_manager",
+        ],
     )
 
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
@@ -128,7 +141,7 @@ def launch_setup(context, *args, **kwargs):
             "gui": gazebo_gui,
             "verbose": "true",
         }.items(),
-        condition=IfCondition(launch_gazebo)
+        condition=IfCondition(launch_gazebo),
     )
 
     gz_spawn_entity = Node(
@@ -136,13 +149,18 @@ def launch_setup(context, *args, **kwargs):
         executable="spawn_entity.py",
         output="screen",
         arguments=[
-            "-topic", "robot_description",
-            "-entity", "ur",
-            "-x", "0.0",
-            "-y", "0.0",
-            "-z", "0.0",
+            "-topic",
+            "robot_description",
+            "-entity",
+            "ur",
+            "-x",
+            "0.0",
+            "-y",
+            "0.0",
+            "-z",
+            "0.0",
         ],
-        condition=IfCondition(launch_gazebo)
+        condition=IfCondition(launch_gazebo),
     )
 
     return [
@@ -156,22 +174,29 @@ def launch_setup(context, *args, **kwargs):
         gz_spawn_entity,
     ]
 
+
 def generate_launch_description():
     declared_arguments = [
         DeclareLaunchArgument("ur_type", default_value="ur5e"),
         DeclareLaunchArgument("safety_limits", default_value="true"),
         DeclareLaunchArgument("safety_pos_margin", default_value="0.15"),
         DeclareLaunchArgument("safety_k_position", default_value="20"),
-        DeclareLaunchArgument("runtime_config_package", default_value="ur_simulation_gz"),
+        DeclareLaunchArgument(
+            "runtime_config_package", default_value="ur_simulation_gz"
+        ),
         DeclareLaunchArgument("controllers_file", default_value="ur_controllers.yaml"),
         DeclareLaunchArgument("description_package", default_value="ur_description"),
         DeclareLaunchArgument("description_file", default_value="ur.urdf.xacro"),
         DeclareLaunchArgument("prefix", default_value='""'),
         DeclareLaunchArgument("start_joint_controller", default_value="true"),
-        DeclareLaunchArgument("initial_joint_controller", default_value="joint_trajectory_controller"),
+        DeclareLaunchArgument(
+            "initial_joint_controller", default_value="joint_trajectory_controller"
+        ),
         DeclareLaunchArgument("launch_rviz", default_value="true"),
         DeclareLaunchArgument("gazebo_gui", default_value="true"),
         DeclareLaunchArgument("world_file", default_value="empty.world"),
         DeclareLaunchArgument("launch_gazebo", default_value="true"),
     ]
-    return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])
+    return LaunchDescription(
+        declared_arguments + [OpaqueFunction(function=launch_setup)]
+    )

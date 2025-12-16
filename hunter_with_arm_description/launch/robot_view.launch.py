@@ -1,7 +1,12 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import (
+    Command,
+    FindExecutable,
+    LaunchConfiguration,
+    PathJoinSubstitution,
+)
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -23,30 +28,34 @@ def generate_launch_description():
         with this launch file.",
         ),
         DeclareLaunchArgument(
-            'use_sim_time',
-            default_value='true',
-            description='Use sim time if true',
+            "use_sim_time",
+            default_value="true",
+            description="Use sim time if true",
         ),
     ]
 
     # Initialize Arguments
     gui = LaunchConfiguration("gui")
-    use_sim_time = LaunchConfiguration('use_sim_time')
+    use_sim_time = LaunchConfiguration("use_sim_time")
     description_file = LaunchConfiguration("description_file")
-    
+
     # Get URDF via xacro
     robot_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("hunter_with_arm_description"), "description", description_file]
+                [
+                    FindPackageShare("hunter_with_arm_description"),
+                    "description",
+                    description_file,
+                ]
             ),
         ]
     )
     robot_description = {
         "robot_description": ParameterValue(robot_description_content, value_type=str),
-        'use_sim_time': ParameterValue(use_sim_time, value_type=bool),
+        "use_sim_time": ParameterValue(use_sim_time, value_type=bool),
     }
 
     rviz_config_file = PathJoinSubstitution(
@@ -63,7 +72,7 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
-        arguments=["--ros-args", "--log-level", "info"]
+        arguments=["--ros-args", "--log-level", "info"],
     )
     rviz_node = Node(
         package="rviz2",

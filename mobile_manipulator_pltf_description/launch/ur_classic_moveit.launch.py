@@ -1,8 +1,13 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction
+from launch.actions import (
+    DeclareLaunchArgument,
+    IncludeLaunchDescription,
+    OpaqueFunction,
+)
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
+
 
 def launch_setup(context, *args, **kwargs):
     # Initialize Arguments
@@ -18,7 +23,11 @@ def launch_setup(context, *args, **kwargs):
 
     ur_control_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            [FindPackageShare("ur_simulation_gz"), "/launch", "/ur_classic_control.launch.py"]
+            [
+                FindPackageShare("ur_simulation_gz"),
+                "/launch",
+                "/ur_classic_control.launch.py",
+            ]
         ),
         launch_arguments={
             "ur_type": ur_type,
@@ -56,6 +65,7 @@ def launch_setup(context, *args, **kwargs):
 
     return nodes_to_launch
 
+
 def generate_launch_description():
     declared_arguments = []
     declared_arguments.append(
@@ -63,8 +73,18 @@ def generate_launch_description():
             "ur_type",
             description="Type/series of used UR robot.",
             choices=[
-                "ur3", "ur3e", "ur5", "ur5e", "ur7e", "ur10", "ur10e",
-                "ur12e", "ur16e", "ur15", "ur20", "ur30",
+                "ur3",
+                "ur3e",
+                "ur5",
+                "ur5e",
+                "ur7e",
+                "ur10",
+                "ur10e",
+                "ur12e",
+                "ur16e",
+                "ur15",
+                "ur20",
+                "ur30",
             ],
             default_value="ur5e",
         )
@@ -126,4 +146,6 @@ def generate_launch_description():
         )
     )
 
-    return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])
+    return LaunchDescription(
+        declared_arguments + [OpaqueFunction(function=launch_setup)]
+    )

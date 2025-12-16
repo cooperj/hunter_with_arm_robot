@@ -1,5 +1,11 @@
 # Hunter Robot Simulation
 
+```bash 
+ros2 launch mobile_manipulator_pltf_description sim_bringup.launch.py
+```
+
+--- 
+
 This repository contains the **URDF** description and Gazebo simulation for the **Hunter V2** robot. The Hunter V2 is an **Ackermann-steered** mobile robot with front-wheel steering, simulated using ROS 2 control.
 
 Official Robot Website: [AgileX Hunter V2B](https://global.agilex.ai/products/hunter-2-0)
@@ -51,8 +57,9 @@ colcon build
 
 This repository includes the following ROS 2 packages:
 
-1. **`hunter_with_arm_description`**: URDF and robot description files.
-2. **`hunter_with_arm_gazebo`**: Simulation environment for the Hunter V2 in Gazebo.
+1. **`hunter_with_arm_description`**: URDF and robot description files. Also includes Gazebo simulation launch files and configuration (previously in `hunter_with_arm_gazebo`).
+2. **`mobile_manipulator_pltf_description`**: Description and simulation files for the mobile manipulator platform. Includes Gazebo simulation launch files and worlds (previously in `mobile_manipulator_pltf_gazebo`).
+3. **`mobile_manipulator_pltf_bringup`**: MoveIt configuration and bringup files for the mobile manipulator platform.
 
 ---
 
@@ -77,7 +84,7 @@ This launch file starts Rviz and loads the Hunter V2 model.
 To load the Hunter V2 in a Gazebo simulation environment:
 
 ```bash
-ros2 launch hunter_with_arm_gazebo launch_sim.launch.py
+ros2 launch hunter_with_arm_description launch_sim.launch.py
 ```
 
 [Gazebo Simulation](https://github.com/user-attachments/assets/90757617-af3b-4bc8-bf1f-f08c5ecc1247)
@@ -131,7 +138,7 @@ For more details on ROS 2 Control and Gazebo integration, see:
 
 # Mobile Manipulator Platform ROS 2 Packages
 
-This repository is designed for bringing up a mobile manipulator platform: `mobile_manipulator_pltf_bringup`, `mobile_manipulator_pltf_description`, and `mobile_manipulator_pltf_gazebo` to facilitate bringing up the robot, providing its description, and simulating it in Gazebo, part of the Agri-OpenCore (AOC) project.
+This repository is designed for bringing up a mobile manipulator platform with the following packages: `mobile_manipulator_pltf_bringup` and `mobile_manipulator_pltf_description` to facilitate bringing up the robot, providing its description, and simulating it in Gazebo, part of the Agri-OpenCore (AOC) project.
 
 
 --- 
