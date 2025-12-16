@@ -23,8 +23,12 @@ import yaml
 
 def generate_launch_description():
     """
-    Basic simulator launch file for mobile manipulator platform.
+    Basic simulator launch file for mobile manipulator platform with MoveIt support.
     Uses empty_world.world from mobile_manipulator_pltf_description package.
+    
+    This launch file depends on mobile_manipulator_pltf_bringup package for MoveIt
+    configuration (SRDF, controllers, kinematics, etc.). It provides a complete
+    simulation environment suitable for use by external packages.
     """
     ld = LaunchDescription()
 
@@ -149,7 +153,8 @@ def generate_launch_description():
         ]
     )
 
-    # Build MoveIt config
+    # Build MoveIt config (from mobile_manipulator_pltf_bringup package)
+    # This provides SRDF, trajectory execution, kinematics, and planning pipelines
     moveit_config = (
         MoveItConfigsBuilder(
             "mobile_manipulator", package_name="mobile_manipulator_pltf_bringup"
