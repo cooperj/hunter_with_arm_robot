@@ -4,9 +4,10 @@ from launch.actions import (
     DeclareLaunchArgument,
     IncludeLaunchDescription,
     RegisterEventHandler,
+    SetEnvironmentVariable,
 )
 from launch_ros.actions import Node
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessStart
 from launch.substitutions import (
     LaunchConfiguration,
@@ -176,6 +177,13 @@ def generate_launch_description():
     # Inject robot_description manually
     moveit_config.robot_description["robot_description"] = robot_description_content
 
+    # Set GAZEBO_PLUGIN_PATH so gazebo_ros2_control plugin can be found
+    set_gazebo_plugin_path = SetEnvironmentVariable(
+        "GAZEBO_PLUGIN_PATH",
+        os.path.join(get_package_share_directory("gazebo_ros2_control"), "..", "..", "lib") +
+        ":" + os.environ.get("GAZEBO_PLUGIN_PATH", "")
+    )
+
     # Include Gazebo launch file
     gazebo_launch_file = os.path.join(
         get_package_share_directory("gazebo_ros"), "launch", "gazebo.launch.py"
@@ -250,15 +258,18 @@ def generate_launch_description():
         "ur5_controllers_gripper.yaml",
     )
 
-    controller_manager_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[moveit_config.robot_description, joint_controllers_file],
-        output="screen",
-        remappings=[
-            ("~/robot_description", "/robot_description"),
-        ],
-    )
+    # NOTE: For Gazebo simulation, the gazebo_ros2_control plugin provides
+    # its own controller_manager. We don't need a separate ros2_control_node.
+    # Uncomment this if you want to run without Gazebo.
+    # controller_manager_node = Node(
+    #     package="controller_manager",
+    #     executable="ros2_control_node",
+    #     parameters=[moveit_config.robot_description, joint_controllers_file],
+    #     output="screen",
+    #     remappings=[
+    #         ("~/robot_description", "/robot_description"),
+    #     ],
+    # )
 
     # Robot state publisher
     robot_state_publisher = Node(
@@ -276,6 +287,8 @@ def generate_launch_description():
             "joint_state_broadcaster",
             "--controller-manager",
             "/controller_manager",
+            "--controller-manager-timeout",
+            "60",
         ],
         output="screen",
     )
@@ -287,6 +300,8 @@ def generate_launch_description():
             "ackermann_like_controller",
             "--controller-manager",
             "/controller_manager",
+            "--controller-manager-timeout",
+            "60",
         ],
         output="screen",
         condition=IfCondition(use_base),
@@ -299,6 +314,8 @@ def generate_launch_description():
             "joint_trajectory_controller",
             "--controller-manager",
             "/controller_manager",
+            "--controller-manager-timeout",
+            "60",
         ],
         output="screen",
         condition=IfCondition(use_arm),
@@ -311,6 +328,8 @@ def generate_launch_description():
             "gripper_position_controller",
             "--controller-manager",
             "/controller_manager",
+            "--controller-manager-timeout",
+            "60",
         ],
         output="screen",
         condition=IfCondition(use_arm),
@@ -347,9 +366,11 @@ def generate_launch_description():
     )
 
     # Event handlers to sequence node startup
+    # NOTE: Since gazebo_ros2_control provides the controller_manager,
+    # we wait for the robot to spawn before starting controller spawners
     delay_joint_state_broadcaster = RegisterEventHandler(
         OnProcessStart(
-            target_action=controller_manager_node,
+            target_action=spawn_the_robot,
             on_start=[joint_state_broadcaster_spawner],
         )
     )
@@ -398,6 +419,7 @@ def generate_launch_description():
     )
 
     # Add all actions to launch description
+    ld.add_action(set_gazebo_plugin_path)  # Must be before Gazebo launch
     ld.add_action(x_arg)
     ld.add_action(y_arg)
     ld.add_action(z_arg)
@@ -415,7 +437,7 @@ def generate_launch_description():
     ld.add_action(arm_type_arg)
     ld.add_action(arm_name_arg)
     ld.add_action(gazebo)
-    ld.add_action(controller_manager_node)
+    # ld.add_action(controller_manager_node)  # Commented out - gazebo_ros2_control provides its own
     ld.add_action(robot_state_publisher)
     ld.add_action(delay_spawn_robot)
     ld.add_action(delay_joint_state_broadcaster)

@@ -102,6 +102,27 @@
       >
         <origin xyz="0 0 0" rpy="0 0 0"/>
       </xacro:robotiq_gripper>
+
+      <!-- Camera attached to top of the end effector -->
+      <link name="${prefix}arm_camera_link">
+        <visual>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <box size="0.04 0.04 0.02"/>
+          </geometry>
+          <material name="camera_gray">
+            <color rgba="0.2 0.2 0.2 1.0"/>
+          </material>
+        </visual>
+      </link>
+
+      <joint name="${prefix}arm_camera_joint" type="fixed">
+        <parent link="${prefix}tool0"/>
+        <child link="${prefix}arm_camera_link"/>
+        <!-- small offset above the end effector -->
+        <origin xyz="0 0 0.12" rpy="0 0 0"/>
+      </joint>
+
     </xacro:if>
 
     <!-- Disable collision between base_link_inertia (UR arm base) and chassis -->

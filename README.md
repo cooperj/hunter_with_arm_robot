@@ -1,6 +1,10 @@
 # Hunter Robot Simulation
 
 ```bash 
+
+export GAZEBO_PLUGIN_PATH=/opt/ros/humble/lib:$GAZEBO_PLUGIN_PATH && echo "GAZEBO_PLUGIN_PATH=$GAZEBO_PLUGIN_PATH"
+
+
 ros2 launch mobile_manipulator_pltf_description sim_bringup.launch.py
 ```
 

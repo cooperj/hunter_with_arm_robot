@@ -1,0 +1,93 @@
+================================================================================
+ROBOTIQ 85 GRIPPER GAZEBO FIX - QUICK START CHECKLIST
+================================================================================
+
+✓ CHANGES APPLIED:
+  [✓] robotiq_gripper.ros2_control.xacro - Fixed plugin conflict
+  [✓] robotiq_gripper_macro.xacro - Added selfCollide configuration
+  [✓] Build verified - No errors
+  [✓] URDF generated successfully with gripper links
+
+================================================================================
+STEP 1: REBUILD (Run Once)
+================================================================================
+
+cd /home/ros/aoc_hunter_ws
+colcon build --packages-select mobile_manipulator_pltf_description --symlink-install
+
+Expected: "Summary: 1 package finished"
+
+================================================================================
+STEP 2: VERIFY FIX (Run Once)
+================================================================================
+
+bash src/.ai-docs/test_gripper.sh
+
+Expected output:
+✓ Gripper found in URDF (56 references)
+✓ Found 9 gripper links
+✓ Mimic joints configured (5 found)
+✓ Gazebo ros2_control plugin found
+✓ Position command interfaces configured (6)
+✓ Self-collision enabled for mimic joints
+
+================================================================================
+STEP 3: LAUNCH SIMULATION
+================================================================================
+
+# Terminal 1: Start simulation
+ros2 launch mobile_manipulator_pltf_description sim_bringup.launch.py \
+    use_gazebo:=true use_rviz:=true
+
+Wait for output:
+  "[spawn_entity.py-X] entity name: mobile_manipulator"
+  "[gazebo-X] Connected to gazebo server"
+
+================================================================================
+STEP 4: TEST GRIPPER MOTION (In new terminal)
+================================================================================
+
+# Terminal 2: Open gripper
+ros2 action send_goal /gripper_position_controller/gripper_cmd \
+    control_msgs/action/GripperCommand \
+    "{command: {position: 0.0, max_effort: 100.0}}"
+
+# Terminal 2: Close gripper
+ros2 action send_goal /gripper_position_controller/gripper_cmd \
+    control_msgs/action/GripperCommand \
+    "{command: {position: 0.4, max_effort: 100.0}}"
+
+================================================================================
+STEP 5: VERIFY IN GAZEBO & RVIZ
+================================================================================
+
+CHECK IN GAZEBO CLIENT:
+  [ ] All gripper links visible in 3D view
+  [ ] Fingers move when gripper commands sent
+  [ ] Gripper can grasp objects (collision working)
+
+CHECK IN RVIZ:
+  [ ] Gripper still visible (should be same as before)
+
+================================================================================
+SUCCESS CRITERIA
+================================================================================
+
+✓ ALL OF THE FOLLOWING MUST BE TRUE:
+  [  ] Gripper appears in Gazebo 3D view
+  [  ] Fingers move when commanded
+  [  ] Joint states show all robotiq joints
+  [  ] No errors in Gazebo console
+  [  ] Gripper can interact with objects
+
+IF ALL PASS: ✅ FIX IS COMPLETE!
+
+================================================================================
+FILES CHANGED
+================================================================================
+
+Two files modified in src/mobile_manipulator_pltf_description/description/:
+  1. robotiq_gripper.ros2_control.xacro (plugin conflict fix)
+  2. robotiq_gripper_macro.xacro (selfCollide addition)
+
+See documentation in this folder for details.

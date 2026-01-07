@@ -506,7 +506,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /camera_01/depth/image_raw
+        Value: /arm_camera/depth/image_raw
       Value: true
   Enabled: true
   Global Options:
