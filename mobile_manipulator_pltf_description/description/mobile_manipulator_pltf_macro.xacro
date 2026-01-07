@@ -96,7 +96,7 @@
         name="RobotiqGripperHardwareInterface"
         prefix="${prefix}"
         parent="tool0"
-        use_fake_hardware="true"
+        use_fake_hardware="false"
         com_port="/dev/ttyUSB0"
         sim_gazebo="true"
       >
